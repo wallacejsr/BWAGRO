@@ -1,0 +1,147 @@
+import React, { Suspense, lazy } from 'react';
+import { MessageCircle } from 'lucide-react';
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+
+// Lazy loading pages
+const AdDetailView = lazy(() => import('./pages/AdDetailView'));
+const AdsListingView = lazy(() => import('./pages/AdsListingView'));
+const CategoriesView = lazy(() => import('./pages/CategoriesView'));
+const PricingView = lazy(() => import('./pages/PricingView'));
+const AdCreationView = lazy(() => import('./pages/AdCreationView'));
+const LoginView = lazy(() => import('./pages/LoginView'));
+const RegisterView = lazy(() => import('./pages/RegisterView'));
+const ContactView = lazy(() => import('./pages/ContactView'));
+const AboutView = lazy(() => import('./pages/AboutView'));
+const TermsView = lazy(() => import('./pages/TermsView'));
+const PrivacyView = lazy(() => import('./pages/PrivacyView'));
+const UserDashboardView = lazy(() => import('./pages/UserDashboardView'));
+
+// Admin Pages
+const AdminLoginView = lazy(() => import('./pages/AdminLoginView'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+
+// Auth Guard Component
+// Fix: children must be optional to satisfy TypeScript's JSX property checks in certain environments
+const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
+  const user = localStorage.getItem('terralink_user');
+  const location = useLocation();
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
+
+// Admin Guard Component
+// Fix: children must be optional to satisfy TypeScript's JSX property checks in certain environments
+const RequireAdmin = ({ children }: { children?: React.ReactNode }) => {
+  const admin = localStorage.getItem('terralink_admin_token');
+  const location = useLocation();
+
+  if (!admin) {
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-700"></div>
+  </div>
+);
+
+const App: React.FC = () => {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith('/admin');
+  const isUserAreaPath = location.pathname.startsWith('/minha-conta');
+
+  return (
+    <div className="min-h-screen flex flex-col font-sans antialiased text-slate-900">
+      {!isAdminPath && <Header />}
+      
+      <main className="flex-grow">
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/anuncios" element={<AdsListingView />} />
+            <Route path="/categorias" element={<CategoriesView />} />
+            <Route path="/planos" element={<PricingView />} />
+            <Route path="/contato" element={<ContactView />} />
+            <Route path="/quem-somos" element={<AboutView />} />
+            <Route path="/termos-de-uso" element={<TermsView />} />
+            <Route path="/privacidade" element={<PrivacyView />} />
+            <Route path="/login" element={<LoginView />} />
+            <Route path="/cadastro" element={<RegisterView />} />
+            
+            {/* Admin Login */}
+            <Route path="/admin/login" element={<AdminLoginView />} />
+
+            {/* User Protected Routes */}
+            <Route 
+              path="/anunciar" 
+              element={
+                <RequireAuth>
+                  <AdCreationView />
+                </RequireAuth>
+              } 
+            />
+
+            {/* Customer Area Protected Routes */}
+            <Route 
+              path="/minha-conta/*" 
+              element={
+                <RequireAuth>
+                  <UserDashboardView />
+                </RequireAuth>
+              } 
+            />
+            
+            {/* Admin Protected Routes */}
+            <Route 
+              path="/admin/*" 
+              element={
+                <RequireAdmin>
+                  <AdminDashboard />
+                </RequireAdmin>
+              } 
+            />
+            
+            <Route path="/categoria/:slug" element={<AdsListingView />} />
+            <Route path="/anuncio/:id" element={<AdDetailView />} />
+            <Route path="*" element={<div className="p-20 text-center">404 - Página não encontrada</div>} />
+          </Routes>
+        </Suspense>
+      </main>
+
+      {!isAdminPath && !isUserAreaPath && <Footer />}
+
+      {/* Floating WhatsApp Action */}
+      {!isAdminPath && !isUserAreaPath && (
+        <div className="md:hidden fixed bottom-6 right-6 z-50">
+          <a 
+            href="https://wa.me/5500000000000" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center text-white"
+          >
+            <MessageCircle className="w-5 h-5" strokeWidth={1.5} />
+          </a>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AppWrapper = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWrapper;

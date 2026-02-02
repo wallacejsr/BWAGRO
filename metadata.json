@@ -1,0 +1,8 @@
+{
+  "name": "TerraLink - Marketplace Rural",
+  "description": "Uma plataforma moderna e completa de classificados rurais para compra e venda de animais, máquinas, insumos e imóveis.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
