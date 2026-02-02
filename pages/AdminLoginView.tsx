@@ -14,10 +14,10 @@ const AdminLoginView: React.FC = () => {
     setError('');
 
     // Credenciais de teste hardcoded conforme solicitado
-    if (email === 'admin@terralink.com.br' && password === 'TerraLink@2026!') {
+    if (email === 'admin@bwagro.com.br' && password === 'BWAGRO@2026!') {
       setTimeout(() => {
-        localStorage.setItem('terralink_admin_token', 'mock_admin_jwt_token_2026');
-        localStorage.setItem('terralink_admin_user', JSON.stringify({ name: 'Administrador Master' }));
+        localStorage.setItem('bwagro_admin_token', 'mock_admin_jwt_token_2026');
+        localStorage.setItem('bwagro_admin_user', JSON.stringify({ name: 'Administrador Master' }));
         setLoading(false);
         navigate('/admin');
       }, 800);
@@ -55,7 +55,7 @@ const AdminLoginView: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-slate-900 outline-none transition-all font-medium"
-              placeholder="admin@terralink.com.br"
+              placeholder="admin@bwagro.com.br"
             />
           </div>
           <div>

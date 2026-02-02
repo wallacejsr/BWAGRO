@@ -9,7 +9,7 @@ type Step = 'CATEGORY' | 'DETAILS' | 'MEDIA' | 'PRICING' | 'REVIEW' | 'SUCCESS';
 
 const AdCreationView: React.FC = () => {
   const navigate = useNavigate();
-  const user = localStorage.getItem('terralink_user');
+  const user = localStorage.getItem('bwagro_user');
   
   // Se não estiver logado, o App.tsx tratará o redirecionamento, 
   // mas mantemos um fallback de segurança aqui.
@@ -31,12 +31,12 @@ const AdCreationView: React.FC = () => {
 
   // Persistência de rascunho
   useEffect(() => {
-    const draft = localStorage.getItem('terralink_ad_draft');
+    const draft = localStorage.getItem('bwagro_ad_draft');
     if (draft) setFormData(JSON.parse(draft));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('terralink_ad_draft', JSON.stringify(formData));
+    localStorage.setItem('bwagro_ad_draft', JSON.stringify(formData));
   }, [formData]);
 
   const handleCepLookup = async (cep: string) => {
@@ -235,7 +235,7 @@ const AdCreationView: React.FC = () => {
               <div className="space-y-4">
                 <button 
                   onClick={() => {
-                    localStorage.removeItem('terralink_ad_draft');
+                    localStorage.removeItem('bwagro_ad_draft');
                     setCurrentStep('SUCCESS');
                   }}
                   className="w-full py-6 bg-green-700 text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-green-900/20 hover:bg-green-800 transition-all active:scale-95"

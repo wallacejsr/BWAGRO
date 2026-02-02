@@ -111,7 +111,7 @@ const Home: React.FC = () => {
             <div className="flex-1 text-white text-center lg:text-left">
               <h2 className="text-xl font-semibold mb-4 leading-tight">Pronto para fechar o melhor negócio do ano?</h2>
               <p className="text-green-100 text-sm mb-6 opacity-90">
-                Junte-se a mais de 10.000 produtores rurais que já utilizam a TerraLink para comprar e vender com segurança e rapidez.
+                Junte-se a mais de 10.000 produtores rurais que já utilizam a BWAGRO para comprar e vender com segurança e rapidez.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link to="/anunciar" className="bg-yellow-400 text-yellow-950 px-6 h-10 leading-10 rounded-lg font-semibold text-sm hover:bg-yellow-300 transition-all">

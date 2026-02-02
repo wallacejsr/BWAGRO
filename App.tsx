@@ -26,7 +26,7 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 // Auth Guard Component
 // Fix: children must be optional to satisfy TypeScript's JSX property checks in certain environments
 const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
-  const user = localStorage.getItem('terralink_user');
+  const user = localStorage.getItem('bwagro_user');
   const location = useLocation();
 
   if (!user) {
@@ -39,7 +39,7 @@ const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
 // Admin Guard Component
 // Fix: children must be optional to satisfy TypeScript's JSX property checks in certain environments
 const RequireAdmin = ({ children }: { children?: React.ReactNode }) => {
-  const admin = localStorage.getItem('terralink_admin_token');
+  const admin = localStorage.getItem('bwagro_admin_token');
   const location = useLocation();
 
   if (!admin) {

@@ -123,7 +123,7 @@ const TermsView: React.FC = () => {
 
             <div className="mt-12 pt-8 border-t border-slate-100 text-center">
               <p className="text-slate-400 text-sm italic">
-                Ao continuar utilizando a TerraLink, você declara estar de acordo com todas as disposições acima.
+                Ao continuar utilizando a BWAGRO, você declara estar de acordo com todas as disposições acima.
               </p>
             </div>
           </article>

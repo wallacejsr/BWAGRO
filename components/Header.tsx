@@ -13,7 +13,7 @@ const Header: React.FC = () => {
 
   // Sincroniza o estado do usuário com o localStorage em cada mudança de rota
   useEffect(() => {
-    const storedUser = localStorage.getItem('terralink_user');
+    const storedUser = localStorage.getItem('bwagro_user');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
@@ -22,7 +22,7 @@ const Header: React.FC = () => {
   }, [location.pathname]); // Re-executa quando a rota muda
 
   const handleLogout = () => {
-    localStorage.removeItem('terralink_user');
+    localStorage.removeItem('bwagro_user');
     setUser(null);
     navigate('/');
   };
@@ -37,7 +37,7 @@ const Header: React.FC = () => {
               <div className="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
                 <span className="text-white text-xl font-semibold">T</span>
               </div>
-              <span className="text-xl font-semibold tracking-tight text-slate-800">Terra<span className="text-green-700">Link</span></span>
+              <span className="text-xl font-semibold tracking-tight text-slate-800">BW<span className="text-green-700">AGRO</span></span>
             </Link>
           </div>
 

@@ -31,7 +31,7 @@ const Icons = {
 export const CONTACT_CONFIG = {
   whatsapp: '5511999999999',
   whatsappDisplay: '(11) 99999-9999',
-  email: 'suporte@terralink.com.br',
+  email: 'suporte@bwagro.com.br',
   address: 'Av. Paulista, 1000 - Bela Vista, São Paulo - SP',
   workingHours: 'Segunda a Sexta, das 08h às 18h',
   mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.197503049187!2d-46.65643442377501!3d-23.56134917879684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f94f441977d0a!2sAv.%20Paulista%2C%201000%20-%20Bela%20Vista%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001310-100!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr'
@@ -39,13 +39,13 @@ export const CONTACT_CONFIG = {
 
 export const ABOUT_DATA = {
   hero: {
-    title: "TerraLink: Conectando quem produz ao futuro do agronegócio",
+    title: "BWAGRO: Conectando quem produz ao futuro do agronegócio",
     subtitle: "A plataforma líder que transforma o mercado rural com transparência e tecnologia.",
     image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop"
   },
   history: {
     title: "Nossa História",
-    text: "Nascida da necessidade real do produtor rural brasileiro, a TerraLink surgiu em 2020 para eliminar barreiras e burocracias no mercado de compra e venda no campo. O que começou como um projeto regional de classificados de máquinas tornou-se a maior rede de conexões do agronegócio nacional. Entendemos que o tempo no campo é precioso e que a confiança é o adubo de qualquer bom negócio.",
+    text: "Nascida da necessidade real do produtor rural brasileiro, a BWAGRO surgiu em 2020 para eliminar barreiras e burocracias no mercado de compra e venda no campo. O que começou como um projeto regional de classificados de máquinas tornou-se a maior rede de conexões do agronegócio nacional. Entendemos que o tempo no campo é precioso e que a confiança é o adubo de qualquer bom negócio.",
     image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=800&auto=format&fit=crop"
   },
   pillars: [
@@ -83,12 +83,12 @@ export const TERMS_DATA = {
     {
       id: 'aceitacao',
       title: '1. Aceitação dos Termos',
-      content: '<p>Ao acessar e utilizar a plataforma TerraLink, você concorda expressamente com estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não deverá utilizar nossos serviços. A TerraLink atua como uma plataforma de classificados, conectando compradores e vendedores do agronegócio.</p>'
+      content: '<p>Ao acessar e utilizar a plataforma BWAGRO, você concorda expressamente com estes Termos de Uso. Se você não concordar com qualquer parte destes termos, não deverá utilizar nossos serviços. A BWAGRO atua como uma plataforma de classificados, conectando compradores e vendedores do agronegócio.</p>'
     },
     {
       id: 'cadastro',
       title: '2. Cadastro e Segurança da Conta',
-      content: '<p>Para publicar anúncios, o usuário deve realizar um cadastro fornecendo dados verídicos e atualizados. Você é o único responsável por manter a confidencialidade de sua senha e por todas as atividades que ocorrem em sua conta.</p><ul><li>O cadastro é pessoal e intransferível.</li><li>A TerraLink reserva-se o direito de suspender contas com dados suspeitos.</li></ul>'
+      content: '<p>Para publicar anúncios, o usuário deve realizar um cadastro fornecendo dados verídicos e atualizados. Você é o único responsável por manter a confidencialidade de sua senha e por todas as atividades que ocorrem em sua conta.</p><ul><li>O cadastro é pessoal e intransferível.</li><li>A BWAGRO reserva-se o direito de suspender contas com dados suspeitos.</li></ul>'
     },
     {
       id: 'regras-anuncios',
@@ -98,24 +98,24 @@ export const TERMS_DATA = {
     {
       id: 'planos-reembolso',
       title: '4. Planos de Assinatura e Reembolso',
-      content: '<p>A TerraLink oferece planos gratuitos e premium. O pagamento dos planos premium garante maior visibilidade conforme descrito na página de Planos. Reembolsos podem ser solicitados em até 7 dias após a contratação, desde que os benefícios de destaque ainda não tenham sido integralmente utilizados.</p>'
+      content: '<p>A BWAGRO oferece planos gratuitos e premium. O pagamento dos planos premium garante maior visibilidade conforme descrito na página de Planos. Reembolsos podem ser solicitados em até 7 dias após a contratação, desde que os benefícios de destaque ainda não tenham sido integralmente utilizados.</p>'
     },
     {
       id: 'propriedade-intelectual',
       title: '5. Propriedade Intelectual',
-      content: '<p>A marca TerraLink, logotipos, layouts e o código-fonte da plataforma são propriedade exclusiva de nossa empresa. O uso indevido de nossa marca ou o "scraping" de dados de nossos usuários para fins comerciais externos é terminantemente proibido e passível de medidas legais.</p>'
+      content: '<p>A marca BWAGRO, logotipos, layouts e o código-fonte da plataforma são propriedade exclusiva de nossa empresa. O uso indevido de nossa marca ou o "scraping" de dados de nossos usuários para fins comerciais externos é terminantemente proibido e passível de medidas legais.</p>'
     },
     {
       id: 'responsabilidade',
       title: '6. Limitação de Responsabilidade',
-      content: '<p>A TerraLink não participa das negociações financeiras entre usuários. Não garantimos a qualidade dos produtos anunciados nem a idoneidade financeira dos compradores. Recomendamos sempre verificar o produto pessoalmente e realizar transações seguras.</p>'
+      content: '<p>A BWAGRO não participa das negociações financeiras entre usuários. Não garantimos a qualidade dos produtos anunciados nem a idoneidade financeira dos compradores. Recomendamos sempre verificar o produto pessoalmente e realizar transações seguras.</p>'
     }
   ]
 };
 
 export const PRIVACY_DATA = {
   lastUpdate: '15 de Janeiro de 2025',
-  intro: 'Na TerraLink, levamos a sério a proteção dos seus dados. Esta política detalha como coletamos, usamos e protegemos suas informações em conformidade com a LGPD.',
+  intro: 'Na BWAGRO, levamos a sério a proteção dos seus dados. Esta política detalha como coletamos, usamos e protegemos suas informações em conformidade com a LGPD.',
   sections: [
     {
       id: 'dados-coletados',
@@ -133,7 +133,7 @@ export const PRIVACY_DATA = {
       id: 'compartilhamento',
       title: '3. Compartilhamento com Terceiros',
       summary: 'Nunca vendemos seus dados. Compartilhamos apenas com parceiros essenciais (como processadores de pagamento) ou por ordem judicial.',
-      content: '<p>Seus dados podem ser compartilhados com fornecedores de serviços que nos auxiliam na operação (hospedagem, análise de dados e meios de pagamento). Todos os nossos parceiros são obrigados por contrato a manter o mesmo nível de proteção de dados que a TerraLink.</p>'
+      content: '<p>Seus dados podem ser compartilhados com fornecedores de serviços que nos auxiliam na operação (hospedagem, análise de dados e meios de pagamento). Todos os nossos parceiros são obrigados por contrato a manter o mesmo nível de proteção de dados que a BWAGRO.</p>'
     },
     {
       id: 'seus-direitos',
@@ -151,7 +151,7 @@ export const PRIVACY_DATA = {
       id: 'contato-dpo',
       title: '6. Encarregado de Dados (DPO)',
       summary: 'Dúvidas jurídicas sobre privacidade? Nosso Encarregado de Dados está pronto para ajudar.',
-      content: '<p>Para qualquer questão relativa à sua privacidade ou para exercer seus direitos, entre em contato com nosso DPO pelo e-mail: <strong>dpo@terralink.com.br</strong>. Responderemos sua solicitação em até 15 dias úteis.</p>'
+      content: '<p>Para qualquer questão relativa à sua privacidade ou para exercer seus direitos, entre em contato com nosso DPO pelo e-mail: <strong>dpo@bwagro.com.br</strong>. Responderemos sua solicitação em até 15 dias úteis.</p>'
     }
   ]
 };

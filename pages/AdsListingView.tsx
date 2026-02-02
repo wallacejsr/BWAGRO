@@ -48,7 +48,7 @@ const AdsListingView: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-end gap-6">
             <div>
               <div className="flex items-center gap-2 text-sm text-slate-400 font-bold uppercase tracking-widest mb-2">
-                <span className="text-green-600">TerraLink</span>
+                <span className="text-green-600">BWAGRO</span>
                 <ChevronRight className="w-3 h-3" strokeWidth={1.5} />
                 <span>Classificados</span>
               </div>

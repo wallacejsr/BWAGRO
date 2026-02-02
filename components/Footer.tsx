@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
               <div className="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center">
                 <span className="text-white text-xl font-semibold">T</span>
               </div>
-              <span className="text-xl font-semibold tracking-tight text-white">Terra<span className="text-green-500">Link</span></span>
+              <span className="text-xl font-semibold tracking-tight text-white">BW<span className="text-green-500">AGRO</span></span>
             </Link>
             <p className="text-sm leading-relaxed mb-6">
               Conectando o campo ao mercado com tecnologia, transparência e as melhores oportunidades para o produtor rural brasileiro.
@@ -63,7 +63,7 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-green-500" strokeWidth={1.5} />
-                suporte@terralink.com.br
+                suporte@bwagro.com.br
               </li>
             </ul>
             <div className="mt-8">
@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
         
         <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-slate-500">
-            &copy; 2024 TerraLink Marketplace. Todos os direitos reservados. CNPJ: 00.000.000/0001-00
+            &copy; 2024 BWAGRO Marketplace. Todos os direitos reservados. CNPJ: 00.000.000/0001-00
           </p>
           <div className="flex gap-6 grayscale opacity-50">
             <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-4" />

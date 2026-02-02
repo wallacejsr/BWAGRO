@@ -145,7 +145,7 @@ const PricingView: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-16">
              <h2 className="text-3xl font-black text-slate-900 mb-4 font-display">Dúvidas Frequentes</h2>
-             <p className="text-slate-500">Tudo o que você precisa saber sobre as assinaturas TerraLink.</p>
+             <p className="text-slate-500">Tudo o que você precisa saber sobre as assinaturas BWAGRO.</p>
           </div>
 
           <div className="space-y-4">

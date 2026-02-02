@@ -23,7 +23,7 @@ const LoginView: React.FC = () => {
       }
       
       // Detecta se é o email do admin para dar um aviso
-      if (formData.email === 'admin@terralink.com.br') {
+      if (formData.email === 'admin@bwagro.com.br') {
         setAdminHint(true);
       } else {
         setAdminHint(false);
@@ -41,7 +41,7 @@ const LoginView: React.FC = () => {
     e.preventDefault();
     if (errors.email || errors.password || !formData.email || !formData.password) return;
 
-    if (formData.email === 'admin@terralink.com.br') {
+    if (formData.email === 'admin@bwagro.com.br') {
       navigate('/admin/login');
       return;
     }
@@ -49,7 +49,7 @@ const LoginView: React.FC = () => {
     setLoading(true);
     // Simulação de autenticação com o endpoint PHP/MySQL via JWT/Session
     setTimeout(() => {
-      localStorage.setItem('terralink_user', JSON.stringify({ 
+      localStorage.setItem('bwagro_user', JSON.stringify({ 
         id: 'u1', 
         name: 'João do Campo',
         avatar: 'https://i.pravatar.cc/150?u=joao',
@@ -65,13 +65,13 @@ const LoginView: React.FC = () => {
   const demoLogin = () => {
     setLoading(true);
     setTimeout(() => {
-      localStorage.setItem('terralink_user', JSON.stringify({ 
+      localStorage.setItem('bwagro_user', JSON.stringify({ 
         id: 'u1', 
         name: 'Usuário Demo',
         avatar: 'https://i.pravatar.cc/150?u=demo',
         plan: 'boost',
         phone: '(11) 99999-9999',
-        email: 'demo@terralink.com.br'
+        email: 'demo@bwagro.com.br'
       }));
       setLoading(false);
       navigate('/minha-conta', { replace: true });
@@ -182,7 +182,7 @@ const LoginView: React.FC = () => {
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                ) : 'Entrar no TerraLink'}
+                ) : 'Entrar no BWAGRO'}
               </button>
               
               <button 

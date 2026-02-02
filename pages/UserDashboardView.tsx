@@ -19,7 +19,7 @@ const Icons = {
 const UserDashboardView: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const storedUser = localStorage.getItem('terralink_user');
+  const storedUser = localStorage.getItem('bwagro_user');
   const user = storedUser ? JSON.parse(storedUser) : null;
   const isPremium = user?.plan && user.plan !== 'seed';
 
@@ -34,7 +34,7 @@ const UserDashboardView: React.FC = () => {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('terralink_user');
+    localStorage.removeItem('bwagro_user');
     navigate('/login');
   };
 
@@ -500,7 +500,7 @@ const UserDashboardView: React.FC = () => {
   };
 
   const ProfileDashboard = () => {
-    const userName = user?.name || 'Usuário TerraLink';
+    const userName = user?.name || 'Usuário BWAGRO';
     const userCity = user?.location || 'São Paulo, SP';
 
     return (
@@ -508,7 +508,7 @@ const UserDashboardView: React.FC = () => {
         <div className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="relative">
             <img
-              src={user?.avatar || 'https://i.pravatar.cc/150?u=terralink'}
+              src={user?.avatar || 'https://i.pravatar.cc/150?u=bwagro'}
               alt={userName}
               className="w-16 h-16 rounded-xl object-cover"
             />
@@ -630,7 +630,7 @@ const UserDashboardView: React.FC = () => {
       <aside className="hidden lg:flex w-64 bg-white sticky top-0 h-screen flex-col p-6 border-r border-slate-100">
         <div className="flex items-center gap-3 mb-10">
           <div className="w-8 h-8 bg-green-700 rounded-lg flex items-center justify-center text-white font-bold">T</div>
-          <span className="text-lg font-bold text-gray-900">TerraLink</span>
+          <span className="text-lg font-bold text-gray-900">BWAGRO</span>
         </div>
 
         <nav className="flex-grow space-y-1">

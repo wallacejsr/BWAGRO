@@ -1,7 +1,7 @@
 
 import { Quotation } from '../types';
 
-const CACHE_KEY = 'terralink_quotations_cache';
+const CACHE_KEY = 'bwagro_quotations_cache';
 const CACHE_EXPIRATION = 15 * 60 * 1000; // 15 minutos
 
 // Simulação de busca em API externa (CEPEA/B3)

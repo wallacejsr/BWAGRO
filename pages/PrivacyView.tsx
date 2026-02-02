@@ -161,10 +161,10 @@ const PrivacyView: React.FC = () => {
               </p>
               <div className="mt-8">
                 <a 
-                  href="mailto:privacidade@terralink.com.br" 
+                  href="mailto:privacidade@bwagro.com.br" 
                   className="inline-flex items-center gap-2 text-green-700 font-semibold text-sm hover:underline"
                 >
-                  privacidade@terralink.com.br
+                  privacidade@bwagro.com.br
                   <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                 </a>
               </div>

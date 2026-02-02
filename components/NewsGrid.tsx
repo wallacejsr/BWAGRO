@@ -14,7 +14,7 @@ const NewsGrid: React.FC = () => {
               <span className="w-7 h-7 bg-green-100 text-green-700 rounded-lg flex items-center justify-center">
                 <Newspaper className="w-4 h-4" strokeWidth={1.5} />
               </span>
-              Mural de Informações TerraLink
+              Mural de Informações BWAGRO
             </h2>
             <p className="text-slate-500 mt-2 max-w-xl text-sm">
               Fique por dentro das principais notícias e tendências do agronegócio que impactam o seu dia a dia no campo.

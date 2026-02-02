@@ -118,7 +118,7 @@ const AboutView: React.FC = () => {
           </div>
           <div className="order-1 lg:order-2">
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 font-display leading-tight">
-              Por que a TerraLink é <span className="text-green-700">diferente?</span>
+              Por que a BWAGRO é <span className="text-green-700">diferente?</span>
             </h2>
             <p className="text-lg text-slate-500 mb-10 leading-relaxed font-medium">
               Não somos apenas um site de anúncios. Somos uma ferramenta estratégica para quem vive o agronegócio. Cada linha de código é pensada para suportar a robustez das operações rurais.

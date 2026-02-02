@@ -52,7 +52,7 @@ const RegisterView: React.FC = () => {
     setLoading(true);
     // Simulação de registro e auto-login
     setTimeout(() => {
-      localStorage.setItem('terralink_user', JSON.stringify({ 
+      localStorage.setItem('bwagro_user', JSON.stringify({ 
         id: 'u' + Math.random().toString(36).substr(2, 9), 
         name: formData.name,
         avatar: `https://i.pravatar.cc/150?u=${formData.email}`
@@ -103,7 +103,7 @@ const RegisterView: React.FC = () => {
               <div className="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-md">
                 <span className="text-white text-2xl font-black">T</span>
               </div>
-              <span className="text-xl font-black text-slate-800">TerraLink</span>
+              <span className="text-xl font-black text-slate-800">BWAGRO</span>
             </Link>
             
             {!profileType ? (
@@ -262,7 +262,7 @@ const RegisterView: React.FC = () => {
                   className="w-5 h-5 mt-0.5 rounded border-slate-200 text-green-600 focus:ring-green-500 transition-all cursor-pointer"
                 />
                 <label htmlFor="terms" className="text-xs font-bold text-slate-500 leading-relaxed cursor-pointer">
-                  Li e aceito os <Link to="/termos-de-uso" className="text-green-700 hover:underline">Termos de Uso</Link> e a <Link to="/privacidade" className="text-green-700 hover:underline">Política de Privacidade</Link> do TerraLink.
+                  Li e aceito os <Link to="/termos-de-uso" className="text-green-700 hover:underline">Termos de Uso</Link> e a <Link to="/privacidade" className="text-green-700 hover:underline">Política de Privacidade</Link> do BWAGRO.
                 </label>
               </div>
 

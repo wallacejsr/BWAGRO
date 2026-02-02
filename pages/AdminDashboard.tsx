@@ -17,11 +17,11 @@ const Icons = {
 const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const adminData = JSON.parse(localStorage.getItem('terralink_admin_user') || '{"name": "Admin"}');
+  const adminData = JSON.parse(localStorage.getItem('bwagro_admin_user') || '{"name": "Admin"}');
 
   const handleLogout = () => {
-    localStorage.removeItem('terralink_admin_token');
-    localStorage.removeItem('terralink_admin_user');
+    localStorage.removeItem('bwagro_admin_token');
+    localStorage.removeItem('bwagro_admin_user');
     navigate('/admin/login');
   };
 

@@ -18,7 +18,7 @@ const AdSlider: React.FC = () => {
       return [{
         id: 'fallback',
         image: 'https://images.unsplash.com/photo-1495107334217-fc6df44f1c3a?q=80&w=1600&auto=format&fit=crop',
-        title: 'Bem-vindo à TerraLink',
+        title: 'Bem-vindo à BWAGRO',
         subtitle: 'Conectando o produtor rural às melhores oportunidades.',
         buttonText: 'Ver Anúncios',
         buttonLink: '#/anuncios',
@@ -64,7 +64,7 @@ const AdSlider: React.FC = () => {
           <div className="relative h-full max-w-7xl mx-auto px-6 flex flex-col justify-center items-start text-white">
             <div className={`transform transition-all duration-700 delay-300 ${index === current ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               <span className="inline-block px-3 py-1 bg-green-600 text-xs font-semibold tracking-widest uppercase rounded mb-3">
-                Destaque TerraLink
+                Destaque BWAGRO
               </span>
               <h2 className="text-xl font-semibold mb-3 leading-tight max-w-2xl">
                 {banner.title}
