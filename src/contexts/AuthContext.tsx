@@ -37,53 +37,107 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Buscar dados do usuário da VIEW vw_user_status
   const fetchUserStatus = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('vw_user_status')
-      .select('*')
-      .eq('id', userId)
-      .single()
+    try {
+      const { data, error } = await supabase
+        .from('vw_user_status')
+        .select('*')
+        .eq('id', userId)
+        .single()
 
-    if (error) {
-      console.error('Erro ao buscar status do usuário:', error)
+      if (error) {
+        console.error('Erro ao buscar status do usuário:', error)
+        // Fallback: buscar diretamente da tabela users
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single()
+        
+        if (userError || !userData) {
+          console.error('Erro ao buscar usuário:', userError)
+          return null
+        }
+        
+        const user: User = {
+          id: userData.id,
+          email: userData.email,
+          name: userData.name || 'Usuário',
+          phone: userData.phone,
+          role: userData.role || 'USER',
+          location: userData.location,
+          avatar: userData.avatar,
+          plan: userData.plan
+        }
+        
+        setUser(user)
+        return userData
+      }
+
+      // Converter para o tipo User
+      const userData: User = {
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        phone: data.phone,
+        role: data.role || 'USER',
+        location: data.location,
+        avatar: data.avatar,
+        plan: data.plan
+      }
+
+      setUser(userData)
+      return data
+    } catch (err) {
+      console.error('Erro inesperado ao buscar usuário:', err)
       return null
     }
-
-    // Converter para o tipo User
-    const userData: User = {
-      id: data.id,
-      email: data.email,
-      name: data.name,
-      phone: data.phone,
-      role: data.role || 'USER',
-      location: data.location,
-      avatar: data.avatar,
-      plan: data.plan
-    }
-
-    setUser(userData)
-    return data
   }
 
   // Buscar estatísticas via função get_user_stats
   const fetchStats = async (userId: string) => {
-    const { data, error } = await supabase.rpc('get_user_stats', {
-      user_uuid: userId
-    })
+    try {
+      const { data, error } = await supabase.rpc('get_user_stats', {
+        user_uuid: userId
+      })
 
-    if (error) {
-      console.error('Erro ao buscar estatísticas:', error)
-      return
+      if (error) {
+        console.error('Erro ao buscar estatísticas:', error)
+        // Definir valores padrão se a função não existir
+        setStats({
+          total_ads: 0,
+          active_ads: 0,
+          total_views: 0,
+          total_clicks: 0,
+          is_seller: false,
+          first_ad_at: null
+        })
+        return
+      }
+
+      setStats(data as UserStats)
+    } catch (err) {
+      console.error('Erro inesperado ao buscar estatísticas:', err)
+      setStats({
+        total_ads: 0,
+        active_ads: 0,
+        total_views: 0,
+        total_clicks: 0,
+        is_seller: false,
+        first_ad_at: null
+      })
     }
-
-    setStats(data as UserStats)
   }
 
   const refreshStats = async () => {
     if (supabaseUser) {
-      await Promise.all([
-        fetchUserStatus(supabaseUser.id),
-        fetchStats(supabaseUser.id)
-      ])
+      try {
+        await Promise.all([
+          fetchUserStatus(supabaseUser.id),
+          fetchStats(supabaseUser.id)
+        ])
+      } catch (err) {
+        console.error('Erro ao atualizar dados:', err)
+      }
     }
   }
 
