@@ -135,14 +135,14 @@ export const getFavoritesStats = (userId: string): {
 };
 
 // ========================================
-// DETECÇÃO DE PRICE DROP E NOTIFICAÇÕES
+// DETECï¿½ï¿½O DE PRICE DROP E NOTIFICAï¿½ï¿½ES
 // ========================================
 
 import { canNotify, createPriceDropNotification, createInternalNotification, markAsOpportunity } from './notificationService';
 import { sendPriceDropEmail } from './emailService';
 
 export const checkPriceDrops = async (): Promise<void> => {
-  // Obter todos os usuários com favoritos
+  // Obter todos os usuï¿½rios com favoritos
   const allUsers = getAllUsersWithFavorites();
   
   for (const userId of allUsers) {
@@ -152,16 +152,16 @@ export const checkPriceDrops = async (): Promise<void> => {
       const currentPrice = favorite.ad.price;
       const originalPrice = favorite.priceAtFavorite;
       
-      // Verificar se houve redução de preço
+      // Verificar se houve reduï¿½ï¿½o de preï¿½o
       if (currentPrice < originalPrice) {
         // Verificar rate limiting (24h)
         if (!canNotify(userId, favorite.adId)) {
-          continue; // Pular se já notificou recentemente
+          continue; // Pular se jï¿½ notificou recentemente
         }
         
         const percentDrop = ((originalPrice - currentPrice) / originalPrice) * 100;
         
-        // Criar notificação
+        // Criar notificaï¿½ï¿½o
         const notification = createPriceDropNotification(
           userId,
           favorite.adId,
@@ -170,7 +170,7 @@ export const checkPriceDrops = async (): Promise<void> => {
           currentPrice
         );
         
-        // Notificação interna (push)
+        // Notificaï¿½ï¿½o interna (push)
         createInternalNotification(
           userId,
           favorite.adId,
@@ -223,7 +223,7 @@ const getAllUsersWithFavorites = (): string[] => {
 };
 
 const getUserById = (userId: string): { id: string; name: string; email: string } | null => {
-  // Mock - em produção, buscar do backend
+  // Mock - em produï¿½ï¿½o, buscar do backend
   const storedUser = localStorage.getItem('bwagro_user');
   if (!storedUser) return null;
   
@@ -231,11 +231,11 @@ const getUserById = (userId: string): { id: string; name: string; email: string 
   return user.id === userId ? user : null;
 };
 
-// Simular atualização de preço (para testes)
+// Simular atualizaÃ§Ã£o de preÃ§o (para testes)
 export const simulatePriceUpdate = (adId: string, newPrice: number): void => {
-  // Em produção, isso viria do backend quando admin atualiza preço
-  console.log(\Preço atualizado para anúncio \: R$ \\);
+  // Em produÃ§Ã£o, isso viria do backend quando admin atualiza preÃ§o
+  console.log(`PreÃ§o atualizado para anÃºncio ${adId}: R$ ${newPrice.toFixed(2)}`);
   
-  // Disparar verificação
+  // Disparar verificaÃ§Ã£o
   checkPriceDrops();
 };
