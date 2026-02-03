@@ -1,13 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X, MessageCircle } from 'lucide-react';
 import AdsSideDrawer from './AdsSideDrawer';
+import { getUnreadCount } from '../services/messageService';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdsDrawerOpen, setIsAdsDrawerOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,9 +17,12 @@ const Header: React.FC = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem('bwagro_user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const userData = JSON.parse(storedUser);
+      setUser(userData);
+      setUnreadMessages(getUnreadCount(userData.id));
     } else {
       setUser(null);
+      setUnreadMessages(0);
     }
   }, [location.pathname]); // Re-executa quando a rota muda
 
@@ -59,6 +64,20 @@ const Header: React.FC = () => {
           <div className="hidden md:flex items-center space-x-6">
             {user ? (
               <div className="flex items-center gap-4">
+                {/* Mensagens */}
+                <Link 
+                  to="/mensagens" 
+                  className="relative p-2 text-slate-600 hover:text-green-700 hover:bg-slate-50 rounded-lg transition-colors"
+                >
+                  <MessageCircle className="w-5 h-5" strokeWidth={1.5} />
+                  {unreadMessages > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-green-700 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadMessages > 9 ? '9+' : unreadMessages}
+                    </span>
+                  )}
+                </Link>
+                
+                {/* Perfil */}
                 <Link to="/minha-conta" className="flex items-center gap-3 border-r border-slate-100 pr-6 hover:bg-slate-50 transition-all p-1.5 rounded-lg">
                   <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full border border-green-100" />
                   <div className="flex flex-col">
@@ -130,12 +149,32 @@ const Header: React.FC = () => {
           </Link>
           <div className="pt-4 flex flex-col gap-2">
             {user ? (
-              <div className="p-3 bg-slate-50 rounded-lg flex items-center justify-between">
-                <Link to="/minha-conta" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                  <img src={user.avatar} className="w-8 h-8 rounded-full" alt="" />
-                  <span className="font-semibold text-slate-800">Meu Painel</span>
+              <div className="space-y-2">
+                {/* Mensagens */}
+                <Link 
+                  to="/mensagens" 
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-between p-3 bg-slate-50 rounded-lg"
+                >
+                  <div className="flex items-center gap-3">
+                    <MessageCircle className="w-5 h-5 text-slate-600" strokeWidth={1.5} />
+                    <span className="font-medium text-slate-800">Mensagens</span>
+                  </div>
+                  {unreadMessages > 0 && (
+                    <span className="bg-green-700 text-white text-xs font-bold rounded-full px-2 py-0.5">
+                      {unreadMessages}
+                    </span>
+                  )}
                 </Link>
-                <button onClick={handleLogout} className="text-red-500 font-semibold text-xs">Sair</button>
+                
+                {/* Painel */}
+                <div className="p-3 bg-slate-50 rounded-lg flex items-center justify-between">
+                  <Link to="/minha-conta" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
+                    <img src={user.avatar} className="w-8 h-8 rounded-full" alt="" />
+                    <span className="font-semibold text-slate-800">Meu Painel</span>
+                  </Link>
+                  <button onClick={handleLogout} className="text-red-500 font-semibold text-xs">Sair</button>
+                </div>
               </div>
             ) : (
               <Link to="/login" onClick={() => setIsOpen(false)} className="w-full text-center py-3 text-slate-700 font-medium">Entrar</Link>

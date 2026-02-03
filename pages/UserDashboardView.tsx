@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Bell, Camera, CreditCard, DollarSign, Download, Edit3, FileText, Heart, Inbox, LayoutGrid, LogOut, Map, MapPin, MessageSquare, PauseCircle, ShieldCheck, Trash2, User } from 'lucide-react';
 import { MOCK_ADS, MOCK_MESSAGES, MOCK_NOTIFICATIONS, MOCK_INVOICES, MOCK_METRICS } from '../constants';
 import { AdStatus, Message, Ad, AdMetrics } from '../types';
+import { getUnreadCount } from '../services/messageService';
 
 const Icons = {
   Dashboard: () => <LayoutGrid className="w-5 h-5" strokeWidth={1.5} />,
@@ -22,11 +23,13 @@ const UserDashboardView: React.FC = () => {
   const storedUser = localStorage.getItem('bwagro_user');
   const user = storedUser ? JSON.parse(storedUser) : null;
   const isPremium = user?.plan && user.plan !== 'seed';
+  
+  const unreadMessagesCount = user ? getUnreadCount(user.id) : 0;
 
   const menuItems = [
     { label: 'Visão Geral', path: '/minha-conta', icon: <Icons.Dashboard />, badge: 0 },
     { label: 'Meus Anúncios', path: '/minha-conta/anuncios', icon: <Icons.Ads />, badge: 0 },
-    { label: 'Mensagens', path: '/minha-conta/mensagens', icon: <Icons.Messages />, badge: MOCK_MESSAGES.filter(m => !m.isRead).length },
+    { label: 'Mensagens', path: '/mensagens', icon: <Icons.Messages />, badge: unreadMessagesCount },
     { label: 'Favoritos', path: '/minha-conta/favoritos', icon: <Icons.Favorites />, badge: 0 },
     { label: 'Notificações', path: '/minha-conta/notificacoes', icon: <Icons.Notifications />, badge: MOCK_NOTIFICATIONS.filter(n => !n.isRead).length },
     { label: 'Financeiro', path: '/minha-conta/financeiro', icon: <Icons.Finance />, badge: 0 },

@@ -133,24 +133,57 @@ export interface NewsItem {
 
 export interface Message {
   id: string;
-  adId: string;
-  adTitle: string;
+  chatId: string;
   senderId: string;
   senderName: string;
-  receiverId: string;
   content: string;
   timestamp: string;
   isRead: boolean;
   senderAvatar?: string;
+  isFiltered?: boolean; // Mensagem filtrada por conter contato não autorizado
+}
+
+export interface Chat {
+  id: string; // chatId único
+  adId: string;
+  adTitle: string;
+  adPrice: number;
+  adImage: string;
+  sellerId: string;
+  sellerName: string;
+  buyerId: string;
+  buyerName: string;
+  lastMessage: string;
+  lastMessageTime: string;
+  unreadCount: number;
+  status: 'pending' | 'unlocked'; // pending = lead não desbloqueado
+  createdAt: string;
+}
+
+export interface Lead {
+  chatId: string;
+  adId: string;
+  sellerId: string;
+  buyerId: string;
+  status: 'pending' | 'unlocked';
+  unlockedAt?: string;
+  costInCredits?: number;
+}
+
+export interface ContactInfo {
+  email: string;
+  phone: string;
+  whatsapp?: string;
 }
 
 export interface Notification {
   id: string;
-  type: 'SYSTEM' | 'SECURITY' | 'PROMO' | 'AD_STATUS';
+  type: 'SYSTEM' | 'SECURITY' | 'PROMO' | 'AD_STATUS' | 'NEW_MESSAGE';
   title: string;
   content: string;
   timestamp: string;
   isRead: boolean;
+  link?: string;
 }
 
 export interface Invoice {
