@@ -6,7 +6,7 @@ import { useAuth } from '../src/contexts/AuthContext';
 const LoginView: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, user } = useAuth();
+  const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -16,13 +16,6 @@ const LoginView: React.FC = () => {
   
   // Prioriza o destino de onde o usuário veio, ou vai para o painel por padrão
   const from = (location.state as any)?.from?.pathname || "/minha-conta";
-
-  // Redirecionar se já estiver logado
-  useEffect(() => {
-    if (user) {
-      navigate(from, { replace: true });
-    }
-  }, [user, navigate, from]);
 
   // Validação em tempo real
   useEffect(() => {
@@ -69,7 +62,7 @@ const LoginView: React.FC = () => {
       );
       setLoading(false);
     } else {
-      // A navegação será feita automaticamente pelo useEffect quando user mudar
+      navigate(from, { replace: true });
       setLoading(false);
     }
   };

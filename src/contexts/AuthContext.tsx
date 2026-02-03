@@ -148,21 +148,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Configurar listener de autenticação
   useEffect(() => {
-    // Verificar sessão atual
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSupabaseUser(session?.user ?? null)
-      if (session?.user) {
-        fetchUserStatus(session.user.id)
-        fetchStats(session.user.id)
-      }
-      setIsLoading(false)
-    })
-
     // Listener para mudanças de autenticação
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSupabaseUser(session?.user ?? null)
-      
-      if (event === 'SIGNED_IN' && session?.user) {
+
+      if (session?.user && !user) {
         await fetchUserStatus(session.user.id)
         await fetchStats(session.user.id)
       } else if (event === 'SIGNED_OUT') {
