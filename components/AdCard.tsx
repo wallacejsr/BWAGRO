@@ -1,14 +1,40 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Eye } from 'lucide-react';
+import { MapPin, Eye, Heart } from 'lucide-react';
 import { Ad } from '../types';
+import { toggleFavorite, isFavorited } from '../services/favoriteService';
 
 interface AdCardProps {
   ad: Ad;
 }
 
 const AdCard: React.FC<AdCardProps> = ({ ad }) => {
+  const [isFav, setIsFav] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  
+  useEffect(() => {
+    const storedUser = localStorage.getItem('bwagro_user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setCurrentUser(user);
+      setIsFav(isFavorited(user.id, ad.id));
+    }
+  }, [ad.id]);
+  
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!currentUser) {
+      alert('Faça login para favoritar anúncios');
+      return;
+    }
+    
+    const result = toggleFavorite(currentUser.id, ad);
+    setIsFav(result.isFavorited);
+  };
+  
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -21,6 +47,21 @@ const AdCard: React.FC<AdCardProps> = ({ ad }) => {
           Destaque
         </div>
       )}
+      
+      {/* Botão de Favoritar */}
+      <button
+        onClick={handleFavoriteClick}
+        className="absolute top-4 right-4 z-10 p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition-all group/fav"
+      >
+        <Heart 
+          className={`w-5 h-5 transition-all ${
+            isFav 
+              ? 'fill-red-500 text-red-500' 
+              : 'text-slate-600 group-hover/fav:text-red-500'
+          }`} 
+          strokeWidth={1.5} 
+        />
+      </button>
       
       {/* Image Wrapper */}
       <div className="relative h-48 overflow-hidden">

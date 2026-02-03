@@ -19,6 +19,7 @@ const TermsView = lazy(() => import('./pages/TermsView'));
 const PrivacyView = lazy(() => import('./pages/PrivacyView'));
 const UserDashboardView = lazy(() => import('./pages/UserDashboardView'));
 const MessagesView = lazy(() => import('./pages/MessagesView'));
+const FavoritesView = lazy(() => import('./pages/FavoritesView'));
 
 // Admin Pages
 const AdminLoginView = lazy(() => import('./pages/AdminLoginView'));
@@ -98,6 +99,15 @@ const App: React.FC = () => {
               element={
                 <RequireAuth>
                   <MessagesView />
+                </RequireAuth>
+              } 
+            />
+            
+            <Route 
+              path="/favoritos" 
+              element={
+                <RequireAuth>
+                  <FavoritesView />
                 </RequireAuth>
               } 
             />

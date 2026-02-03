@@ -194,3 +194,12 @@ export interface Invoice {
   planName: string;
   pdfUrl: string;
 }
+
+export interface Favorite {
+  id: string;
+  userId: string;
+  adId: string;
+  ad: Ad; // Anúncio favoritado
+  priceAtFavorite: number; // Preço no momento do favorito
+  favoritedAt: string;
+}

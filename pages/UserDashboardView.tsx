@@ -30,7 +30,7 @@ const UserDashboardView: React.FC = () => {
     { label: 'Visão Geral', path: '/minha-conta', icon: <Icons.Dashboard />, badge: 0 },
     { label: 'Meus Anúncios', path: '/minha-conta/anuncios', icon: <Icons.Ads />, badge: 0 },
     { label: 'Mensagens', path: '/mensagens', icon: <Icons.Messages />, badge: unreadMessagesCount },
-    { label: 'Favoritos', path: '/minha-conta/favoritos', icon: <Icons.Favorites />, badge: 0 },
+    { label: 'Favoritos', path: '/favoritos', icon: <Icons.Favorites />, badge: 0 },
     { label: 'Notificações', path: '/minha-conta/notificacoes', icon: <Icons.Notifications />, badge: MOCK_NOTIFICATIONS.filter(n => !n.isRead).length },
     { label: 'Financeiro', path: '/minha-conta/financeiro', icon: <Icons.Finance />, badge: 0 },
     { label: 'Perfil', path: '/minha-conta/perfil', icon: <Icons.Profile />, badge: 0 },
