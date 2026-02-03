@@ -66,7 +66,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           role: userData.role || 'USER',
           location: userData.location,
           avatar: userData.avatar,
-          plan: userData.plan
+          plan: userData.plan,
+          isAdmin: userData.is_admin ?? false
         }
         
         setUser(user)
@@ -82,7 +83,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         role: data.role || 'USER',
         location: data.location,
         avatar: data.avatar,
-        plan: data.plan
+        plan: data.plan,
+        isAdmin: data.is_admin ?? false
       }
 
       setUser(userData)
@@ -239,7 +241,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         stats,
         isLoading,
         isSeller: stats?.is_seller ?? false,
-        isAdmin: user?.role === 'ADMIN' || false,
+        isAdmin: user?.isAdmin ?? user?.role === 'ADMIN' || false,
         signIn,
         signUp,
         signOut,

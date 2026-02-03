@@ -4,7 +4,7 @@ import { useAuth } from '../src/contexts/AuthContext';
 
 const AdminLoginView: React.FC = () => {
   const navigate = useNavigate();
-  const { signIn, user, isAdmin } = useAuth();
+  const { signIn, signOut, user, isAdmin } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,8 +13,13 @@ const AdminLoginView: React.FC = () => {
   useEffect(() => {
     if (user && isAdmin) {
       navigate('/admin');
+      return;
     }
-  }, [user, isAdmin, navigate]);
+    if (user && !isAdmin) {
+      setError('Usuário não possui permissão de administrador.');
+      signOut();
+    }
+  }, [user, isAdmin, navigate, signOut]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,10 +27,10 @@ const AdminLoginView: React.FC = () => {
     setError('');
 
     try {
-      await signIn(email, password);
-      // AuthContext vai redirecionar automaticamente se for admin
-    } catch (err: any) {
-      setError(err.message || 'Credenciais inválidas.');
+      const { error } = await signIn(email, password);
+      if (error) {
+        setError(error.message || 'Credenciais inválidas.');
+      }
     } finally {
       setLoading(false);
     }

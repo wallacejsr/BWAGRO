@@ -98,6 +98,7 @@ export interface User {
   avatar?: string;
   plan?: 'seed' | 'boost' | 'harvest';
   twoFactorEnabled?: boolean;
+  isAdmin?: boolean;
 }
 
 export interface Banner {
@@ -199,8 +200,8 @@ export interface Favorite {
   id: string;
   userId: string;
   adId: string;
-  ad: Ad; // Anúncio favoritado
-  priceAtFavorite: number; // Preço no momento do favorito
+  ad: Ad; // Anï¿½ncio favoritado
+  priceAtFavorite: number; // Preï¿½o no momento do favorito
   favoritedAt: string;
 }
 
