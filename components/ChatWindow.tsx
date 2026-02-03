@@ -21,6 +21,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   const [leadStatus, setLeadStatus] = useState<'pending' | 'unlocked'>('unlocked');
   const [userCredits, setUserCredits] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const previousMessagesLength = useRef(0);
   
   const isSeller = currentUserId === chat.sellerId;
   const canUnlock = isSeller && leadStatus === 'pending';
@@ -33,7 +35,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   }, [chat.id, currentUserId]);
   
   useEffect(() => {
-    scrollToBottom();
+    // Só rola se uma nova mensagem foi adicionada
+    if (messages.length > previousMessagesLength.current) {
+      scrollToBottom();
+    }
+    previousMessagesLength.current = messages.length;
   }, [messages]);
   
   const loadMessages = () => {
@@ -42,7 +48,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   };
   
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
   
   const handleSend = () => {
@@ -106,7 +114,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       </div>
       
       {/* Mensagens */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-slate-500">
             <p className="text-sm">Nenhuma mensagem ainda. Inicie a conversa!</p>
