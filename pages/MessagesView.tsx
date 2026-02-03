@@ -210,3 +210,5 @@ export const MessagesView: React.FC = () => {
     </div>
   );
 };
+
+export default MessagesView;
