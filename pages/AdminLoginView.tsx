@@ -1,31 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../src/contexts/AuthContext';
 
 const AdminLoginView: React.FC = () => {
   const navigate = useNavigate();
+  const { signIn, user, isAdmin } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user && isAdmin) {
+      navigate('/admin');
+    }
+  }, [user, isAdmin, navigate]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Credenciais de teste hardcoded conforme solicitado
-    if (email === 'admin@bwagro.com.br' && password === 'BWAGRO@2026!') {
-      setTimeout(() => {
-        localStorage.setItem('bwagro_admin_token', 'mock_admin_jwt_token_2026');
-        localStorage.setItem('bwagro_admin_user', JSON.stringify({ name: 'Administrador Master' }));
-        setLoading(false);
-        navigate('/admin');
-      }, 800);
-    } else {
-      setTimeout(() => {
-        setError('Credenciais administrativas inválidas.');
-        setLoading(false);
-      }, 500);
+    try {
+      await signIn(email, password);
+      // AuthContext vai redirecionar automaticamente se for admin
+    } catch (err: any) {
+      setError(err.message || 'Credenciais inválidas.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,7 +57,7 @@ const AdminLoginView: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-slate-900 outline-none transition-all font-medium"
-              placeholder="admin@bwagro.com.br"
+              placeholder="Digite seu e-mail"
             />
           </div>
           <div>
