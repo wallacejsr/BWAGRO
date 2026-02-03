@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, ChevronLeft, Sprout } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 type ProfileType = 'individual' | 'company' | null;
 
 const RegisterView: React.FC = () => {
   const navigate = useNavigate();
+  const { signUp, user } = useAuth();
   const [profileType, setProfileType] = useState<ProfileType>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [registerError, setRegisterError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     document: '', // CPF ou CNPJ
@@ -20,7 +23,14 @@ const RegisterView: React.FC = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Simulação de Validação
+  // Redirecionar se já estiver logado
+  useEffect(() => {
+    if (user) {
+      navigate('/minha-conta', { replace: true });
+    }
+  }, [user, navigate]);
+
+  // Validação
   useEffect(() => {
     if (!profileType) return;
     const newErrors: Record<string, string> = {};
@@ -45,21 +55,32 @@ const RegisterView: React.FC = () => {
     setErrors(newErrors);
   }, [formData, profileType]);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     if (Object.keys(errors).length > 0 || !acceptedTerms) return;
 
     setLoading(true);
-    // Simulação de registro e auto-login
-    setTimeout(() => {
-      localStorage.setItem('bwagro_user', JSON.stringify({ 
-        id: 'u' + Math.random().toString(36).substr(2, 9), 
-        name: formData.name,
-        avatar: `https://i.pravatar.cc/150?u=${formData.email}`
-      }));
+    setRegisterError('');
+
+    const { error } = await signUp(
+      formData.email,
+      formData.password,
+      formData.name,
+      formData.phone
+    );
+
+    if (error) {
+      setRegisterError(
+        error.message === 'User already registered'
+          ? 'Este e-mail já está cadastrado'
+          : 'Erro ao criar conta. Tente novamente.'
+      );
+      setLoading(false);
+    } else {
+      // Cadastro bem-sucedido
       setLoading(false);
       navigate('/anunciar', { replace: true });
-    }, 1500);
+    }
   };
 
   const getPasswordStrength = () => {
@@ -265,6 +286,12 @@ const RegisterView: React.FC = () => {
                   Li e aceito os <Link to="/termos-de-uso" className="text-green-700 hover:underline">Termos de Uso</Link> e a <Link to="/privacidade" className="text-green-700 hover:underline">Política de Privacidade</Link> do BWAGRO.
                 </label>
               </div>
+
+              {registerError && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-sm text-red-700 font-bold">{registerError}</p>
+                </div>
+              )}
 
               <button 
                 type="submit"

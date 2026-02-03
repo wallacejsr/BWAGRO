@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -25,11 +26,18 @@ const FavoritesView = lazy(() => import('./pages/FavoritesView'));
 const AdminLoginView = lazy(() => import('./pages/AdminLoginView'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
-// Auth Guard Component
-// Fix: children must be optional to satisfy TypeScript's JSX property checks in certain environments
+// Auth Guard Component usando Supabase
 const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
-  const user = localStorage.getItem('bwagro_user');
+  const { user, isLoading } = useAuth();
   const location = useLocation();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2D5016]"></div>
+      </div>
+    );
+  }
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -38,13 +46,20 @@ const RequireAuth = ({ children }: { children?: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Admin Guard Component
-// Fix: children must be optional to satisfy TypeScript's JSX property checks in certain environments
+// Admin Guard Component usando Supabase
 const RequireAdmin = ({ children }: { children?: React.ReactNode }) => {
-  const admin = localStorage.getItem('bwagro_admin_token');
+  const { user, isAdmin, isLoading } = useAuth();
   const location = useLocation();
 
-  if (!admin) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2D5016]"></div>
+      </div>
+    );
+  }
+
+  if (!user || !isAdmin) {
     return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
@@ -57,7 +72,7 @@ const PageLoader = () => (
   </div>
 );
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith('/admin');
   const isUserAreaPath = location.pathname.startsWith('/minha-conta');
@@ -158,10 +173,12 @@ const App: React.FC = () => {
   );
 };
 
-const AppWrapper = () => (
+const App = () => (
   <Router>
-    <App />
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   </Router>
 );
 
-export default AppWrapper;
+export default App;

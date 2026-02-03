@@ -1,34 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ChevronDown, Menu, X, MessageCircle } from 'lucide-react';
+import { ChevronDown, Menu, X, MessageCircle, Bell } from 'lucide-react';
 import AdsSideDrawer from './AdsSideDrawer';
-import { getUnreadCount } from '../services/messageService';
+import { useAuth } from '../contexts/AuthContext';
+import { useChats } from '../hooks/useMessages';
+import { useNotifications } from '../hooks/useNotifications';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAdsDrawerOpen, setIsAdsDrawerOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [unreadMessages, setUnreadMessages] = useState(0);
+  const { user, signOut } = useAuth();
+  const { chats } = useChats();
+  const { unreadCount } = useNotifications();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // Sincroniza o estado do usuário com o localStorage em cada mudança de rota
-  useEffect(() => {
-    const storedUser = localStorage.getItem('bwagro_user');
-    if (storedUser) {
-      const userData = JSON.parse(storedUser);
-      setUser(userData);
-      setUnreadMessages(getUnreadCount(userData.id));
-    } else {
-      setUser(null);
-      setUnreadMessages(0);
-    }
-  }, [location.pathname]); // Re-executa quando a rota muda
+  // Calcular mensagens não lidas
+  const unreadMessages = chats.reduce((sum, chat) => sum + chat.unreadCount, 0);
 
-  const handleLogout = () => {
-    localStorage.removeItem('bwagro_user');
-    setUser(null);
+  const handleLogout = async () => {
+    await signOut();
     navigate('/');
   };
 
@@ -77,11 +68,26 @@ const Header: React.FC = () => {
                   )}
                 </Link>
                 
+                {/* Notificações */}
+                <Link 
+                  to="/notificacoes" 
+                  className="relative p-2 text-slate-600 hover:text-green-700 hover:bg-slate-50 rounded-lg transition-colors"
+                >
+                  <Bell className="w-5 h-5" strokeWidth={1.5} />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-green-700 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </Link>
+                
                 {/* Perfil */}
                 <Link to="/minha-conta" className="flex items-center gap-3 border-r border-slate-100 pr-6 hover:bg-slate-50 transition-all p-1.5 rounded-lg">
-                  <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-full border border-green-100" />
+                  <div className="w-9 h-9 rounded-full border border-green-100 bg-green-700 flex items-center justify-center text-white font-bold">
+                    {user.name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
                   <div className="flex flex-col">
-                    <span className="text-xs font-semibold text-slate-800 leading-tight truncate max-w-[80px]">{user.name.split(' ')[0]}</span>
+                    <span className="text-xs font-semibold text-slate-800 leading-tight truncate max-w-[80px]">{user.name?.split(' ')[0] || 'Usuário'}</span>
                     <span className="text-[9px] font-semibold text-green-600 uppercase tracking-widest">Painel</span>
                   </div>
                 </Link>
@@ -170,7 +176,9 @@ const Header: React.FC = () => {
                 {/* Painel */}
                 <div className="p-3 bg-slate-50 rounded-lg flex items-center justify-between">
                   <Link to="/minha-conta" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                    <img src={user.avatar} className="w-8 h-8 rounded-full" alt="" />
+                    <div className="w-8 h-8 rounded-full bg-green-700 flex items-center justify-center text-white font-bold">
+                      {user.name?.charAt(0).toUpperCase() || 'U'}
+                    </div>
                     <span className="font-semibold text-slate-800">Meu Painel</span>
                   </Link>
                   <button onClick={handleLogout} className="text-red-500 font-semibold text-xs">Sair</button>

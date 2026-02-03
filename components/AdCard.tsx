@@ -3,36 +3,43 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Eye, Heart } from 'lucide-react';
 import { Ad } from '../types';
-import { toggleFavorite, isFavorited } from '../services/favoriteService';
+import { useAuth } from '../contexts/AuthContext';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface AdCardProps {
   ad: Ad;
 }
 
 const AdCard: React.FC<AdCardProps> = ({ ad }) => {
+  const { user } = useAuth();
+  const { toggleFavorite, isFavorited } = useFavorites();
   const [isFav, setIsFav] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [isToggling, setIsToggling] = useState(false);
   
   useEffect(() => {
-    const storedUser = localStorage.getItem('bwagro_user');
-    if (storedUser) {
-      const user = JSON.parse(storedUser);
-      setCurrentUser(user);
-      setIsFav(isFavorited(user.id, ad.id));
+    if (user) {
+      isFavorited(ad.id).then(setIsFav);
     }
-  }, [ad.id]);
+  }, [ad.id, user]);
   
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (!currentUser) {
+    if (!user) {
       alert('Faça login para favoritar anúncios');
       return;
     }
     
-    const result = toggleFavorite(currentUser.id, ad);
-    setIsFav(result.isFavorited);
+    setIsToggling(true);
+    try {
+      const result = await toggleFavorite(ad.id);
+      setIsFav(result.isFavorited);
+    } catch (error) {
+      console.error('Erro ao favoritar:', error);
+    } finally {
+      setIsToggling(false);
+    }
   };
   
   const formattedPrice = new Intl.NumberFormat('pt-BR', {
@@ -51,7 +58,8 @@ const AdCard: React.FC<AdCardProps> = ({ ad }) => {
       {/* Botão de Favoritar */}
       <button
         onClick={handleFavoriteClick}
-        className="absolute top-4 right-4 z-10 p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition-all group/fav"
+        disabled={isToggling}
+        className="absolute top-4 right-4 z-10 p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition-all group/fav disabled:opacity-50"
       >
         <Heart 
           className={`w-5 h-5 transition-all ${

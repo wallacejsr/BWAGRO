@@ -1,20 +1,30 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginView: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signIn, user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
   const [adminHint, setAdminHint] = useState(false);
   
   // Prioriza o destino de onde o usuário veio, ou vai para o painel por padrão
   const from = (location.state as any)?.from?.pathname || "/minha-conta";
 
-  // Validação em tempo real simulada
+  // Redirecionar se já estiver logado
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
+
+  // Validação em tempo real
   useEffect(() => {
     const validate = () => {
       let newErrors = { email: '', password: '' };
@@ -23,7 +33,7 @@ const LoginView: React.FC = () => {
       }
       
       // Detecta se é o email do admin para dar um aviso
-      if (formData.email === 'admin@bwagro.com.br') {
+      if (formData.email === 'admin@bwagro.com' || formData.email === 'admin@bwagro.com.br') {
         setAdminHint(true);
       } else {
         setAdminHint(false);
@@ -37,45 +47,31 @@ const LoginView: React.FC = () => {
     validate();
   }, [formData]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (errors.email || errors.password || !formData.email || !formData.password) return;
 
-    if (formData.email === 'admin@bwagro.com.br') {
+    if (formData.email === 'admin@bwagro.com' || formData.email === 'admin@bwagro.com.br') {
       navigate('/admin/login');
       return;
     }
 
     setLoading(true);
-    // Simulação de autenticação com o endpoint PHP/MySQL via JWT/Session
-    setTimeout(() => {
-      localStorage.setItem('bwagro_user', JSON.stringify({ 
-        id: 'u1', 
-        name: 'João do Campo',
-        avatar: 'https://i.pravatar.cc/150?u=joao',
-        plan: 'boost',
-        phone: '(11) 98888-7777',
-        email: formData.email
-      }));
-      setLoading(false);
-      navigate(from, { replace: true });
-    }, 1000);
-  };
+    setLoginError('');
 
-  const demoLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      localStorage.setItem('bwagro_user', JSON.stringify({ 
-        id: 'u1', 
-        name: 'Usuário Demo',
-        avatar: 'https://i.pravatar.cc/150?u=demo',
-        plan: 'boost',
-        phone: '(11) 99999-9999',
-        email: 'demo@bwagro.com.br'
-      }));
+    const { error } = await signIn(formData.email, formData.password);
+
+    if (error) {
+      setLoginError(
+        error.message === 'Invalid login credentials' 
+          ? 'E-mail ou senha incorretos' 
+          : 'Erro ao fazer login. Tente novamente.'
+      );
       setLoading(false);
-      navigate('/minha-conta', { replace: true });
-    }, 800);
+    } else {
+      // A navegação será feita automaticamente pelo useEffect quando user mudar
+      setLoading(false);
+    }
   };
 
   return (
@@ -173,6 +169,12 @@ const LoginView: React.FC = () => {
               />
               <label htmlFor="remember" className="text-sm font-bold text-slate-600 cursor-pointer">Lembrar-me neste dispositivo</label>
             </div>
+
+            {loginError && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+                <p className="text-sm text-red-700 font-bold">{loginError}</p>
+              </div>
+            )}
             
             <div className="space-y-4">
               <button 
@@ -183,14 +185,6 @@ const LoginView: React.FC = () => {
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                 ) : 'Entrar no BWAGRO'}
-              </button>
-              
-              <button 
-                type="button"
-                onClick={demoLogin}
-                className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-sm shadow-lg hover:bg-slate-800 transition-all active:scale-95 flex items-center justify-center gap-3"
-              >
-                🚀 Acesso Demonstrativo (Painel Cliente)
               </button>
             </div>
           </form>
