@@ -96,25 +96,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Buscar estatísticas via função get_user_stats
   const fetchStats = async (userId: string) => {
     try {
+      // Temporariamente desabilitado devido a erro de recursão infinita em RLS
+      // Usar valores padrão até que as políticas sejam corrigidas
+      console.warn('Função get_user_stats desabilitada temporariamente')
+      
+      setStats({
+        total_ads: 0,
+        active_ads: 0,
+        total_views: 0,
+        total_clicks: 0,
+        is_seller: false,
+        first_ad_at: null
+      })
+      
+      // TODO: Implementar consulta direta às tabelas quando RLS estiver corrigido
+      /*
       const { data, error } = await supabase.rpc('get_user_stats', {
         user_uuid: userId
       })
 
-      if (error) {
-        console.error('Erro ao buscar estatísticas:', error)
-        // Definir valores padrão se a função não existir
-        setStats({
-          total_ads: 0,
-          active_ads: 0,
-          total_views: 0,
-          total_clicks: 0,
-          is_seller: false,
-          first_ad_at: null
-        })
-        return
-      }
-
+      if (error) throw error
       setStats(data as UserStats)
+      */
     } catch (err) {
       console.error('Erro inesperado ao buscar estatísticas:', err)
       setStats({
