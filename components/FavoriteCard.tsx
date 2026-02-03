@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Favorite } from '../types';
-import { MapPin, Clock, Eye, Trash2, ExternalLink, ArrowDown } from 'lucide-react';
+import { MapPin, Clock, Eye, Trash2, ExternalLink, ArrowDown, Zap } from 'lucide-react';
 import { getPriceChange, removeFavorite } from '../services/favoriteService';
+import { isOpportunity } from '../services/notificationService';
 import { motion } from 'framer-motion';
 
 interface FavoriteCardProps {
@@ -22,6 +23,7 @@ export const FavoriteCard: React.FC<FavoriteCardProps> = ({
   const [isRemoving, setIsRemoving] = useState(false);
   const priceChange = getPriceChange(favorite);
   const { ad } = favorite;
+  const hasOpportunity = isOpportunity(userId, ad.id);
   
   const isUnavailable = ad.status === 'SOLD' || ad.status === 'PAUSED' || ad.status === 'BLOCKED';
   
@@ -75,6 +77,14 @@ export const FavoriteCard: React.FC<FavoriteCardProps> = ({
           <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded text-xs font-semibold flex items-center gap-1 shadow-lg">
             <ArrowDown className="w-3 h-3" strokeWidth={1.5} />
             -{priceChange.percentChange.toFixed(0)}%
+          </div>
+        )}
+        
+        {/* Selo de Oportunidade */}
+        {hasOpportunity && !isUnavailable && (
+          <div className="absolute top-14 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded text-xs font-semibold flex items-center gap-1 shadow-lg animate-pulse">
+            <Zap className="w-3 h-3 fill-current" strokeWidth={1.5} />
+            Oportunidade
           </div>
         )}
         

@@ -203,3 +203,31 @@ export interface Favorite {
   priceAtFavorite: number; // Preço no momento do favorito
   favoritedAt: string;
 }
+
+
+export interface SMTPConfig {
+  id: string;
+  host: string;
+  port: number;
+  user: string;
+  password: string; // Criptografada
+  encryption: 'SSL' | 'TLS' | 'NONE';
+  fromEmail: string;
+  fromName: string;
+  isActive: boolean;
+  updatedAt: string;
+}
+
+export interface PriceDropNotification {
+  id: string;
+  userId: string;
+  adId: string;
+  adTitle: string;
+  oldPrice: number;
+  newPrice: number;
+  percentDrop: number;
+  notifiedAt: string;
+  channels: ('email' | 'push')[]; // Canais utilizados
+  emailSent: boolean;
+  pushSent: boolean;
+}

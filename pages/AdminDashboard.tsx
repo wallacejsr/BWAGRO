@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { useNavigate, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { CreditCard, FileText, Image, LayoutGrid, LogOut, ShieldCheck, Users } from 'lucide-react';
+import { CreditCard, FileText, Image, LayoutGrid, LogOut, Mail, ShieldCheck, Users } from 'lucide-react';
 import { MOCK_ADS } from '../constants';
+import { SMTPConfigPanel } from '../components/SMTPConfigPanel';
 
 const Icons = {
   Dashboard: () => <LayoutGrid className="w-[18px] h-[18px]" strokeWidth={1.5} />,
@@ -11,6 +12,7 @@ const Icons = {
   Plans: () => <CreditCard className="w-[18px] h-[18px]" strokeWidth={1.5} />,
   Moderation: () => <ShieldCheck className="w-[18px] h-[18px]" strokeWidth={1.5} />,
   Users: () => <Users className="w-[18px] h-[18px]" strokeWidth={1.5} />,
+  Email: () => <Mail className="w-[18px] h-[18px]" strokeWidth={1.5} />,
   Logout: () => <LogOut className="w-[18px] h-[18px]" strokeWidth={1.5} />,
 };
 
@@ -32,6 +34,7 @@ const AdminDashboard: React.FC = () => {
     { label: 'Planos', path: '/admin/plans', icon: <Icons.Plans /> },
     { label: 'Moderação', path: '/admin/ads', icon: <Icons.Moderation /> },
     { label: 'Usuários', path: '/admin/users', icon: <Icons.Users /> },
+    { label: 'Config. E-mail', path: '/admin/email', icon: <Icons.Email /> },
   ];
 
   const StatTile = ({ label, value, trend, icon }: any) => (
@@ -170,6 +173,7 @@ const AdminDashboard: React.FC = () => {
                </table>
             </div>
           } />
+          <Route path="/email" element={<SMTPConfigPanel />} />
           <Route path="*" element={<StatsView />} />
         </Routes>
       </main>
