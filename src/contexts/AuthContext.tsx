@@ -241,7 +241,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         stats,
         isLoading,
         isSeller: stats?.is_seller ?? false,
-        isAdmin: user?.isAdmin ?? user?.role === 'ADMIN' || false,
+        isAdmin: (user?.isAdmin ?? (user?.role === 'ADMIN')) || false,
         signIn,
         signUp,
         signOut,
