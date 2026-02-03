@@ -65,6 +65,7 @@ const AdminLoginView: React.FC = () => {
             <input 
               type="password" 
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-slate-900 outline-none transition-all font-medium"
