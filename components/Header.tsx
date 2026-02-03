@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X, MessageCircle, Bell } from 'lucide-react';
 import AdsSideDrawer from './AdsSideDrawer';
-import { useAuth } from '../contexts/AuthContext';
-import { useChats } from '../hooks/useMessages';
-import { useNotifications } from '../hooks/useNotifications';
+import { useAuth } from '../src/contexts/AuthContext';
+import { useChats } from '../src/hooks/useMessages';
+import { useNotifications } from '../src/hooks/useNotifications';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

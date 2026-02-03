@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Eye, Heart } from 'lucide-react';
 import { Ad } from '../types';
-import { useAuth } from '../contexts/AuthContext';
-import { useFavorites } from '../hooks/useFavorites';
+import { useAuth } from '../src/contexts/AuthContext';
+import { useFavorites } from '../src/hooks/useFavorites';
 
 interface AdCardProps {
   ad: Ad;

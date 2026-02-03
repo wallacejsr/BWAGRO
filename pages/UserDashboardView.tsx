@@ -4,10 +4,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Bell, Camera, CreditCard, DollarSign, Download, Edit3, FileText, Heart, Inbox, LayoutGrid, LogOut, Map, MapPin, MessageSquare, PauseCircle, ShieldCheck, Trash2, User } from 'lucide-react';
 import { MOCK_INVOICES } from '../constants';
 import { AdStatus, Message, Ad, AdMetrics } from '../types';
-import { useAuth } from '../contexts/AuthContext';
-import { useUserAds } from '../hooks/useAds';
-import { useChats } from '../hooks/useMessages';
-import { useNotifications } from '../hooks/useNotifications';
+import { useAuth } from '../src/contexts/AuthContext';
+import { useUserAds } from '../src/hooks/useAds';
+import { useChats } from '../src/hooks/useMessages';
+import { useNotifications } from '../src/hooks/useNotifications';
 
 const Icons = {
   Dashboard: () => <LayoutGrid className="w-5 h-5" strokeWidth={1.5} />,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, ChevronLeft, Sprout } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../src/contexts/AuthContext';
 
 type ProfileType = 'individual' | 'company' | null;
 
