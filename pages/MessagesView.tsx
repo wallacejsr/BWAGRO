@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { MessageCard } from '../components/MessageCard';
 import { ChatWindow } from '../components/ChatWindow';
 import { AdContextCard } from '../components/AdContextCard';
-import { MessageCircle, ShoppingBag, ShoppingCart, Inbox } from 'lucide-react';
+import { MessageCircle, ShoppingBag, ShoppingCart, Inbox, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Chat } from '../types';
 import { getChats, initializeMockData, getUnreadCount } from '../services/messageService';
 
 export const MessagesView: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'sales' | 'purchases'>('sales');
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
@@ -70,34 +70,35 @@ export const MessagesView: React.FC = () => {
   
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-slate-50">
-        <Header />
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center">
-            <p className="text-slate-600">Faça login para acessar suas mensagens</p>
-          </div>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-slate-600">Faça login para acessar suas mensagens</p>
         </div>
-        <Footer />
       </div>
     );
   }
   
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      <Header />
+      {/* Header fixo */}
+      <div className="bg-white border-b sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/minha-conta')}
+              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 text-slate-600" strokeWidth={1.5} />
+            </button>
+            <div className="flex items-center gap-2">
+              <MessageCircle className="w-6 h-6 text-green-700" strokeWidth={1.5} />
+              <h1 className="text-xl font-bold text-slate-900">Central de Mensagens</h1>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div className="flex-1 container mx-auto px-4 py-6">
-        {/* Cabeçalho */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <MessageCircle className="w-6 h-6 text-green-700" strokeWidth={1.5} />
-            <h1 className="text-2xl font-bold text-slate-900">Central de Mensagens</h1>
-          </div>
-          <p className="text-slate-600">
-            Gerencie suas conversas com compradores e vendedores
-          </p>
-        </div>
-        
         {/* Layout de 3 colunas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-[calc(100vh-280px)]">
           {/* Coluna 1: Lista de conversas (esquerda) */}
@@ -205,8 +206,6 @@ export const MessagesView: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      <Footer />
     </div>
   );
 };
