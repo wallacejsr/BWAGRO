@@ -6,7 +6,7 @@ import { useAuth } from '../src/contexts/AuthContext';
 const LoginView: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn } = useAuth();
+  const { signIn, user, isLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -14,8 +14,14 @@ const LoginView: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const [adminHint, setAdminHint] = useState(false);
   
-  // Prioriza o destino de onde o usuário veio, ou vai para o painel por padrão
   const from = (location.state as any)?.from?.pathname || "/minha-conta";
+
+  // Redirecionar apenas quando user estiver pronto E não estiver carregando
+  useEffect(() => {
+    if (user && !isLoading && !loading) {
+      navigate(from, { replace: true });
+    }
+  }, [user, isLoading, loading, navigate, from]);
 
   // Validação em tempo real
   useEffect(() => {
@@ -61,13 +67,8 @@ const LoginView: React.FC = () => {
           : 'Erro ao fazer login. Tente novamente.'
       );
       setLoading(false);
-    } else {
-      // Pequeno delay para garantir que o AuthContext terminou de carregar
-      setTimeout(() => {
-        navigate(from, { replace: true });
-        setLoading(false);
-      }, 100);
     }
+    // Não chamar navigate aqui - o useEffect vai fazer isso quando user estiver pronto
   };
 
   return (

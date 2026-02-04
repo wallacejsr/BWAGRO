@@ -4,36 +4,34 @@ import { useAuth } from '../src/contexts/AuthContext';
 
 const AdminLoginView: React.FC = () => {
   const navigate = useNavigate();
-  const { signIn, signOut, user, isAdmin } = useAuth();
+  const { signIn, signOut, user, isAdmin, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (user && isAdmin) {
+    if (user && isAdmin && !isLoading && !loading) {
       navigate('/admin');
       return;
     }
-    if (user && !isAdmin) {
+    if (user && !isAdmin && !isLoading) {
       setError('Usuário não possui permissão de administrador.');
       signOut();
     }
-  }, [user, isAdmin, navigate, signOut]);
+  }, [user, isAdmin, isLoading, loading, navigate, signOut]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    try {
-      const { error } = await signIn(email, password);
-      if (error) {
-        setError(error.message || 'Credenciais inválidas.');
-      }
-    } finally {
+    const { error } = await signIn(email, password);
+    if (error) {
+      setError(error.message || 'Credenciais inválidas.');
       setLoading(false);
     }
+    // Não chamar navigate aqui - o useEffect vai fazer isso
   };
 
   return (

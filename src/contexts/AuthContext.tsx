@@ -34,81 +34,58 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [supabaseUser, setSupabaseUser] = useState<SupabaseUser | null>(null)
   const [stats, setStats] = useState<UserStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isFetching, setIsFetching] = useState(false)
 
   // Buscar dados do usuário da VIEW vw_user_status
-  const fetchUserStatus = async (userId: string) => {
+  const fetchUserStatus = async (userId: string, signal?: AbortSignal) => {
     try {
-      const { data, error } = await supabase
-        .from('vw_user_status')
+      const { data: userData, error: userError } = await supabase
+        .from('users')
         .select('*')
         .eq('id', userId)
+        .abortSignal(signal)
         .single()
 
-      if (error) {
-        if (error.status === 404) {
-          // Fallback imediato: buscar diretamente da tabela users
-          const { data: userData, error: userError } = await supabase
-            .from('users')
-            .select('*')
-            .eq('id', userId)
-            .single()
-
-          if (userError || !userData) {
-            console.error('Erro ao buscar usuário:', userError)
-            return null
-          }
-
-          const user: User = {
-            id: userData.id,
-            email: userData.email,
-            name: userData.name || 'Usuário',
-            phone: userData.phone,
-            role: userData.role || 'USER',
-            location: userData.location,
-            avatar: userData.avatar,
-            plan: userData.plan,
-            isAdmin: userData.is_admin ?? false
-          }
-
-          setUser(user)
-          return userData
+      if (userError) {
+        if (userError.name !== 'AbortError') {
+          console.error('Erro ao buscar usuário:', userError)
         }
-
-        console.error('Erro ao buscar status do usuário:', error)
         return null
       }
 
-      // Converter para o tipo User
-      const userData: User = {
-        id: data.id,
-        email: data.email,
-        name: data.name,
-        phone: data.phone,
-        role: data.role || 'USER',
-        location: data.location,
-        avatar: data.avatar,
-        plan: data.plan,
-        isAdmin: data.is_admin ?? false
+      const user: User = {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name || 'Usuário',
+        phone: userData.phone,
+        role: userData.role || 'USER',
+        location: userData.location,
+        avatar: userData.avatar,
+        plan: userData.plan,
+        isAdmin: userData.is_admin ?? false
       }
 
-      setUser(userData)
-      return data
-    } catch (err) {
-      console.error('Erro inesperado ao buscar usuário:', err)
+      setUser(user)
+      return userData
+    } catch (err: any) {
+      if (err.name !== 'AbortError') {
+        console.error('Erro inesperado ao buscar usuário:', err)
+      }
       return null
     }
   }
 
   // Buscar estatísticas via função get_user_stats
-  const fetchStats = async (userId: string) => {
+  const fetchStats = async (userId: string, signal?: AbortSignal) => {
     try {
       const { data, error } = await supabase.rpc('get_user_stats', {
         user_uuid: userId
-      })
+      }, { signal })
 
       if (error) {
-        console.error('Erro ao buscar estatísticas:', error)
-        // Fallback para valores padrão
+        if (error.name !== 'AbortError') {
+          console.error('Erro ao buscar estatísticas:', error)
+        }
         setStats({
           total_ads: 0,
           active_ads: 0,
@@ -121,8 +98,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       setStats(data as UserStats)
-    } catch (err) {
-      console.error('Erro inesperado ao buscar estatísticas:', err)
+    } catch (err: any) {
+      if (err.name !== 'AbortError') {
+        console.error('Erro inesperado ao buscar estatísticas:', err)
+      }
       setStats({
         total_ads: 0,
         active_ads: 0,
@@ -135,47 +114,75 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }
 
   const refreshStats = async () => {
-    if (supabaseUser) {
+    if (supabaseUser && !isFetching) {
+      setIsFetching(true)
       try {
         await Promise.all([
           fetchUserStatus(supabaseUser.id),
           fetchStats(supabaseUser.id)
         ])
-      } catch (err) {
-        console.error('Erro ao atualizar dados:', err)
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          console.error('Erro ao atualizar dados:', err)
+        }
+      } finally {
+        setIsFetching(false)
       }
     }
   }
 
   // Configurar listener de autenticação
   useEffect(() => {
-    // Listener para mudanças de autenticação
+    let abortController: AbortController | null = null
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // Cancelar requisições anteriores
+      if (abortController) {
+        abortController.abort()
+      }
+
       setSupabaseUser(session?.user ?? null)
 
-      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user && !user) {
-        setIsLoading(true)
-        try {
-          await fetchUserStatus(session.user.id)
-          await fetchStats(session.user.id)
-        } catch (err) {
-          console.error('Erro ao carregar dados do usuário:', err)
-        } finally {
+      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
+        if (!user && !isFetching) {
+          setIsLoading(true)
+          setIsFetching(true)
+          abortController = new AbortController()
+          
+          try {
+            await Promise.all([
+              fetchUserStatus(session.user.id, abortController.signal),
+              fetchStats(session.user.id, abortController.signal)
+            ])
+          } catch (err: any) {
+            if (err.name !== 'AbortError') {
+              console.error('Erro ao carregar dados do usuário:', err)
+            }
+          } finally {
+            setIsLoading(false)
+            setIsFetching(false)
+          }
+        } else {
           setIsLoading(false)
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null)
         setStats(null)
         setIsLoading(false)
+        setIsFetching(false)
       } else if (!session?.user) {
         setIsLoading(false)
+        setIsFetching(false)
       }
     })
 
     return () => {
+      if (abortController) {
+        abortController.abort()
+      }
       subscription.unsubscribe()
     }
-  }, [user])
+  }, [user, isFetching])
 
   // Função de login
   const signIn = async (email: string, password: string) => {
