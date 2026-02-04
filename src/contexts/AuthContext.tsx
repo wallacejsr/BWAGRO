@@ -102,28 +102,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Buscar estatísticas via função get_user_stats
   const fetchStats = async (userId: string) => {
     try {
-      // Temporariamente desabilitado devido a erro de recursão infinita em RLS
-      // Usar valores padrão até que as políticas sejam corrigidas
-      console.warn('Função get_user_stats desabilitada temporariamente')
-      
-      setStats({
-        total_ads: 0,
-        active_ads: 0,
-        total_views: 0,
-        total_clicks: 0,
-        is_seller: false,
-        first_ad_at: null
-      })
-      
-      // TODO: Implementar consulta direta às tabelas quando RLS estiver corrigido
-      /*
       const { data, error } = await supabase.rpc('get_user_stats', {
         user_uuid: userId
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('Erro ao buscar estatísticas:', error)
+        // Fallback para valores padrão
+        setStats({
+          total_ads: 0,
+          active_ads: 0,
+          total_views: 0,
+          total_clicks: 0,
+          is_seller: false,
+          first_ad_at: null
+        })
+        return
+      }
+
       setStats(data as UserStats)
-      */
     } catch (err) {
       console.error('Erro inesperado ao buscar estatísticas:', err)
       setStats({
@@ -156,21 +153,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSupabaseUser(session?.user ?? null)
 
-      if (event === 'SIGNED_IN' && session?.user && !user) {
-        await fetchUserStatus(session.user.id)
-        await fetchStats(session.user.id)
+      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user && !user) {
+        setIsLoading(true)
+        try {
+          await fetchUserStatus(session.user.id)
+          await fetchStats(session.user.id)
+        } catch (err) {
+          console.error('Erro ao carregar dados do usuário:', err)
+        } finally {
+          setIsLoading(false)
+        }
       } else if (event === 'SIGNED_OUT') {
         setUser(null)
         setStats(null)
+        setIsLoading(false)
+      } else if (!session?.user) {
+        setIsLoading(false)
       }
-
-      setIsLoading(false)
     })
 
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [user])
 
   // Função de login
   const signIn = async (email: string, password: string) => {

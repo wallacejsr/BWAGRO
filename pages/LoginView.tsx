@@ -62,8 +62,11 @@ const LoginView: React.FC = () => {
       );
       setLoading(false);
     } else {
-      navigate(from, { replace: true });
-      setLoading(false);
+      // Pequeno delay para garantir que o AuthContext terminou de carregar
+      setTimeout(() => {
+        navigate(from, { replace: true });
+        setLoading(false);
+      }, 100);
     }
   };
 
