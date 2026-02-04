@@ -45,33 +45,37 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         .single()
 
       if (error) {
+        if (error.status === 404) {
+          // Fallback imediato: buscar diretamente da tabela users
+          const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', userId)
+            .single()
+
+          if (userError || !userData) {
+            console.error('Erro ao buscar usuário:', userError)
+            return null
+          }
+
+          const user: User = {
+            id: userData.id,
+            email: userData.email,
+            name: userData.name || 'Usuário',
+            phone: userData.phone,
+            role: userData.role || 'USER',
+            location: userData.location,
+            avatar: userData.avatar,
+            plan: userData.plan,
+            isAdmin: userData.is_admin ?? false
+          }
+
+          setUser(user)
+          return userData
+        }
+
         console.error('Erro ao buscar status do usuário:', error)
-        // Fallback: buscar diretamente da tabela users
-        const { data: userData, error: userError } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', userId)
-          .single()
-        
-        if (userError || !userData) {
-          console.error('Erro ao buscar usuário:', userError)
-          return null
-        }
-        
-        const user: User = {
-          id: userData.id,
-          email: userData.email,
-          name: userData.name || 'Usuário',
-          phone: userData.phone,
-          role: userData.role || 'USER',
-          location: userData.location,
-          avatar: userData.avatar,
-          plan: userData.plan,
-          isAdmin: userData.is_admin ?? false
-        }
-        
-        setUser(user)
-        return userData
+        return null
       }
 
       // Converter para o tipo User
@@ -152,14 +156,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSupabaseUser(session?.user ?? null)
 
-      if (session?.user && !user) {
+      if (event === 'SIGNED_IN' && session?.user && !user) {
         await fetchUserStatus(session.user.id)
         await fetchStats(session.user.id)
       } else if (event === 'SIGNED_OUT') {
         setUser(null)
         setStats(null)
       }
-      
+
       setIsLoading(false)
     })
 
